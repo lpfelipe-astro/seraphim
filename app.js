@@ -414,7 +414,12 @@ function sendAIMessage() {
             const randomLocations = [
                 "Parque Ibirapuera", "Avenida Paulista", "Shopping Morumbi", 
                 "Aeroporto de Guarulhos", "Estação da Luz", "MASP", 
-                "Bairro da Liberdade", "Allianz Parque", "Rua 25 de Março"
+                "Bairro da Liberdade", "Allianz Parque", "Rua 25 de Março",
+                "ETEC de Mauá", "ETEC Júlio de Mesquita", "ETEC Lauro Gomes",
+                "ETEC Getúlio Vargas", "Mercado Municipal de São Paulo", "UNICAMP",
+                "Pinacoteca de São Paulo", "PUC-SP", "FATEC de Osasco",
+                "Morumbis", "Neo Química Arena", "SENAI Armando de Arruda Pereira"
+                "Galeria do Rock", "Casa das rosas", "Museu da Língua Portuguesa"
             ];
             
             let newLocation = foundSeraphim.location;
