@@ -324,11 +324,11 @@ function checkSavedTheme() {
 }
 
 // ==========================================
-// LÓGICA DO CHAT IA (EASTER EGGS, EXCLUSÃO E EMERGÊNCIA)
+// LÓGICA DO CHAT IA (RELATÓRIOS, EASTER EGGS E EMERGÊNCIA)
 // ==========================================
 
 // Memória temporária da IA para esperar confirmações
-let pendingIAAction = null; 
+let pendingIAAction = null;
 
 function sendAIMessage() {
     const inputField = document.getElementById('ai-input');
@@ -356,7 +356,7 @@ function sendAIMessage() {
         let userIndex = users.findIndex(u => u.email === loggedEmail);
         const currentUser = users[userIndex];
 
-        // --- VERIFICA SE A IA ESTAVA ESPERANDO UMA CONFIRMAÇÃO ---
+        // --- VERIFICA SE A IA ESTAVA ESPERANDO UMA CONFIRMAÇÃO (EXCLUSÃO) ---
         if (pendingIAAction && pendingIAAction.type === 'delete') {
             const isPositive = textoUser.includes('sim') || textoUser.includes('certeza') || textoUser.includes('quero') || textoUser.includes('positivo') || textoUser.includes('apaga');
             
@@ -376,7 +376,50 @@ function sendAIMessage() {
             return;
         }
 
-        // --- LÓGICA DE BUSCA DE RASTREADORES ---
+        // --- 1. IDENTIFICAÇÃO DE INTENÇÃO GERAL (GERAR TABELA/RELATÓRIO) ---
+        const isRelatorioGeral = textoUser.includes('todos') || textoUser.includes('tabela') || textoUser.includes('relatório') || textoUser.includes('resumo');
+        
+        if (isRelatorioGeral) {
+            if (currentUser.seraphims.length === 0) {
+                aiMessageDiv.innerHTML = `<p>Você ainda não possui nenhum Seraphim cadastrado para eu gerar um relatório.</p>`;
+            } else {
+                // Montando a Tabela em HTML com design integrado ao App
+                let tableHTML = `<p>📊 <b>Relatório Geral de Monitoramento:</b></p>`;
+                tableHTML += `<div style="overflow-x: auto;">`; // Adicionado para não quebrar em telas pequenas
+                tableHTML += `<table style="width:100%; margin-top:10px; border-collapse: collapse; font-size: 12px; text-align: left; background: var(--bg-dark); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">`;
+                tableHTML += `<tr style="background-color: var(--accent-beige); color: #000;">
+                                <th style="padding: 10px;">Anjinho</th>
+                                <th style="padding: 10px;">Status / Local</th>
+                                <th style="padding: 10px;">Bateria</th>
+                              </tr>`;
+
+                currentUser.seraphims.forEach(sera => {
+                    let isAlert = sera.location.includes('ALERTA');
+                    let statusColor = isAlert ? '#FF5252' : '#00C853'; // Vermelho ou Verde
+                    let bateria = Math.floor(Math.random() * (100 - 60 + 1)) + 60; // Simula bateria entre 60 e 100%
+                    let icon = isAlert ? '⚠️' : '✅';
+                    
+                    // Pega só o primeiro nome pra caber bonitinho na tabela
+                    let nomeCurto = sera.name.split(' ')[0];
+
+                    tableHTML += `<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">`;
+                    tableHTML += `<td style="padding: 10px; color: var(--text-light); font-weight: bold;">${nomeCurto}</td>`;
+                    tableHTML += `<td style="padding: 10px; color: ${statusColor};">${icon} ${isAlert ? 'EMERGÊNCIA' : sera.location}</td>`;
+                    tableHTML += `<td style="padding: 10px; color: var(--text-muted);">${bateria}% 🔋</td>`;
+                    tableHTML += `</tr>`;
+                });
+                tableHTML += `</table></div>`;
+                tableHTML += `<p style="margin-top: 10px; font-size: 11px; color: var(--text-muted); text-align: right;">Sincronizado agora via satélite.</p>`;
+                
+                aiMessageDiv.innerHTML = tableHTML;
+            }
+            
+            chatBox.appendChild(aiMessageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return; // Encerra aqui se for o comando da tabela
+        }
+
+        // --- 2. LÓGICA DE BUSCA INDIVIDUAL DE RASTREADORES ---
         let foundSeraphim = null;
 
         if (currentUser && currentUser.seraphims.length > 0) {
@@ -389,27 +432,25 @@ function sendAIMessage() {
             }
         }
         
-        // --- DICIONÁRIO DE COMANDOS SECRETOS ---
+        // --- DICIONÁRIO DE COMANDOS SECRETOS INDIVIDUAIS ---
         const isSimulation = textoUser.includes('simular') || textoUser.includes('mover') || textoUser.includes('teletransportar');
         const isDeletion = textoUser.includes('deletar') || textoUser.includes('apagar') || textoUser.includes('remover') || textoUser.includes('excluir');
         const isEmergency = textoUser.includes('socorro') || textoUser.includes('emergência') || textoUser.includes('perigo') || textoUser.includes('alerta') || textoUser.includes('sos');
 
-        // 1. COMANDO DE EMERGÊNCIA (MASTERCODE DE PERIGO)
+        // COMANDO DE EMERGÊNCIA
         if (foundSeraphim && isEmergency) {
-            // Atualiza o banco de dados com um status de alerta crítico
             foundSeraphim.location = "🚨 ALERTA: BOTÃO SOS ACIONADO!";
             localStorage.setItem('app_users', JSON.stringify(users));
             renderSeraphims(currentUser.seraphims);
 
-            // Mensagem da IA formatada em vermelho para dar impacto visual
             aiMessageDiv.innerHTML = `<p style="color: #FF5252; font-weight: bold;">🚨 MODO CRÍTICO ATIVADO! 🚨</p><p style="color: #FF5252; margin-top: 5px;">O rastreador de <b>${foundSeraphim.name}</b> emitiu um sinal de SOS ou saiu da zona segura. A localização ao vivo foi fixada na Home e no Mapa. Recomendamos tentar contato imediato ou acionar as autoridades locais!</p>`;
         }
-        // 2. COMANDO DE EXCLUSÃO
+        // COMANDO DE EXCLUSÃO
         else if (foundSeraphim && isDeletion) {
             pendingIAAction = { type: 'delete', seraphim: foundSeraphim };
             aiMessageDiv.innerHTML = `<p>⚠️ Você está pedindo para <b>remover</b> o rastreador de <b>${foundSeraphim.name}</b>. Isso interromperá o monitoramento. <b>Tem certeza absoluta disso?</b></p>`;
         }
-        // 3. COMANDO DE SIMULAÇÃO DE MOVIMENTO
+        // COMANDO DE SIMULAÇÃO DE MOVIMENTO
         else if (foundSeraphim && isSimulation) {
             const randomLocations = [
                 "Parque Ibirapuera", "Avenida Paulista", "Shopping Morumbi", 
@@ -433,13 +474,13 @@ function sendAIMessage() {
 
             aiMessageDiv.innerHTML = `<p>🚀 <b>Simulação ativada!</b> O GPS de <b>${foundSeraphim.name}</b> foi atualizado para: <b style="color: #00C853;">${newLocation}</b>.</p>`;
         } 
-        // 4. PERGUNTA NORMAL
+        // PERGUNTA NORMAL SOBRE ALGUÉM ESPECÍFICO
         else if (foundSeraphim) {
             aiMessageDiv.innerHTML = `<p>O(a) <b>${foundSeraphim.name}</b> está seguro(a) no momento. Última localização: ${foundSeraphim.location}.</p>`;
         } 
-        // 5. RESPOSTA PADRÃO
+        // RESPOSTA PADRÃO SE NÃO ENTENDER O COMANDO
         else {
-            aiMessageDiv.innerHTML = `<p>Fiz uma varredura geral agora. Todos os seus rastreadores ativos estão enviando sinal corretamente.</p>`;
+            aiMessageDiv.innerHTML = `<p>Fiz uma varredura geral agora. Todos os seus rastreadores ativos estão enviando sinal corretamente. Você pode me pedir um <b>resumo</b> de <b>todos</b> eles ou perguntar por um anjinho específico!</p>`;
         }
         
         chatBox.appendChild(aiMessageDiv);
