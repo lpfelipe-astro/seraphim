@@ -418,7 +418,7 @@ function sendAIMessage() {
                 "ETEC de Mauá", "ETEC Júlio de Mesquita", "ETEC Lauro Gomes",
                 "ETEC Getúlio Vargas", "Mercado Municipal de São Paulo", "UNICAMP",
                 "Pinacoteca de São Paulo", "PUC-SP", "FATEC de Osasco",
-                "Morumbis", "Neo Química Arena", "SENAI Armando de Arruda Pereira"
+                "Morumbis", "Neo Química Arena", "SENAI Armando de Arruda Pereira",
                 "Galeria do Rock", "Casa das rosas", "Museu da Língua Portuguesa"
             ];
             
