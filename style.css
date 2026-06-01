@@ -1,0 +1,401 @@
+@import url('https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&family=Lobster&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    transition: background-color 0.3s, color 0.3s; /* Transição suave de cor */
+}
+
+/* VARIÁVEIS DE CORES: Base do Modo Escuro */
+:root {
+    --bg-dark: #1E1E1E; 
+    --text-light: #F5F5F5; 
+    --text-muted: #aaa;
+    --accent-beige: #DEBC9F; 
+    --card-bg: #2A2A2A; 
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --nav-icon-inactive: #555;
+    --nav-icon-active: #FFFFFF;
+    
+    /* NOVAS VARIÁVEIS: Sombra do Login e Linhas do Grid (Xadrez) */
+    --login-shadow: inset 0 0 120px rgba(92, 58, 33, 0.6); /* Sombra marrom escura nos cantos */
+    --grid-color: rgba(222, 188, 159, 0.15); /* Linha bege com 15% de transparência */
+}
+
+/* VARIÁVEIS DE CORES: Base do Modo Claro (Sobrescreve as de cima) */
+.light-mode {
+    --bg-dark: #F5F5F6; 
+    --text-light: #1A1A1A; 
+    --text-muted: #666;
+    --accent-beige: #C2A285; 
+    --card-bg: #FFFFFF; 
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --nav-icon-inactive: #444;
+    --nav-icon-active: #FFFFFF;
+    
+    /* NOVAS VARIÁVEIS PARA MODO CLARO */
+    --login-shadow: inset 0 0 120px rgba(194, 162, 133, 0.4); /* Sombra marrom clara/bege */
+    --grid-color: rgba(194, 162, 133, 0.25); /* Linha do xadrez mais escura pro fundo branco */
+}
+
+body {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 414px;
+    height: 100%;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+.screen {
+    display: none;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    padding-bottom: 90px; 
+}
+.screen.active { display: block; }
+
+/* --- TELA 2: HOME (EFEITO XADREZ) --- */
+#home-screen {
+    /* Mágica do CSS: Cria o fundo xadrez que você mandou na imagem */
+    background-color: var(--bg-dark);
+    background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 35px 35px; /* Tamanho dos quadradinhos do xadrez */
+}
+
+/* TELA DE LOGIN & CADASTRO */
+.login-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 30px;
+    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--card-bg) 100%);
+    /* Mágica do CSS: Cria a sombra marrom puxando das bordas pro centro */
+    box-shadow: var(--login-shadow);
+}
+
+.logo-text { font-family: serif; font-size: 80px; margin-bottom: -10px; color: var(--text-light); }
+.brand-name { font-family: 'Corinthia', cursive; margin-bottom: 40px; font-weight: 900; color: var(--text-light); }
+
+.form-group { width: 100%; margin-bottom: 20px; }
+.form-group label { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; display: block; }
+.form-group input {
+    width: 100%; padding: 15px; border-radius: 10px; border: none;
+    background-color: var(--input-bg); color: var(--text-light);
+}
+
+/* Formulário de criar seraphim */
+.form-group-light { width: 100%; margin-bottom: 20px; }
+.form-group-light label { font-size: 12px; font-weight: bold; color: var(--text-muted); margin-bottom: 5px; display: block; }
+.form-group-light input {
+    width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--text-muted);
+    background-color: var(--card-bg); color: var(--text-light);
+}
+
+.btn-primary {
+    width: 100%; padding: 15px; background-color: var(--accent-beige); color: #000;
+    border: none; border-radius: 25px; font-weight: bold; font-size: 16px;
+    margin-top: 10px; cursor: pointer;
+}
+
+.auth-link {
+    margin-top: 20px; font-size: 14px; color: var(--text-muted); cursor: pointer;
+}
+.auth-link b { color: var(--accent-beige); }
+
+/* ELEMENTOS DA HOME */
+.home-header { padding: 20px; }
+.search-bar { width: 100%; padding: 10px 15px; border-radius: 20px; border: none; background-color: var(--input-bg); color: var(--text-light); margin-bottom: 20px;}
+.user-info { display: flex; align-items: center; gap: 15px; }
+.avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-beige); }
+
+/* --- NOVO ESTILO DO MAP CARD --- */
+.map-card { 
+    background: linear-gradient(135deg, var(--accent-beige) 0%, #8C6A4F 100%); 
+    margin: 0 20px 20px; 
+    border-radius: 20px; 
+    padding: 20px; 
+    position: relative; 
+    color: #000; /* Texto escuro para dar contraste no fundo bege */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Sombra 3D */
+    overflow: hidden;
+}
+
+/* Efeito de brilho/reflexo no fundo do card */
+.map-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.map-card-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1; /* Fica por cima do brilho */
+}
+
+.map-icon {
+    font-size: 35px;
+    background: rgba(255,255,255,0.4);
+    padding: 10px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+}
+
+.map-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    opacity: 0.7;
+    margin-bottom: 3px;
+}
+
+.map-card h3 { font-size: 16px; font-weight: bold; margin-bottom: 2px; }
+.map-card .map-desc { font-size: 12px; font-weight: bold; opacity: 0.8; }
+
+.map-card-btn {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.trackers-list { padding: 0 20px; }
+
+.tracker-item {
+    display: flex; align-items: center; background-color: var(--card-bg);
+    padding: 15px; border-radius: 10px; margin-top: 10px; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra mais forte pra destacar do fundo xadrez */
+}
+.tracker-info { flex: 1; margin-left: 15px; }
+.tracker-info h4 { font-size: 14px; }
+.tracker-info p { font-size: 12px; color: var(--text-muted); }
+
+/* IA CHAT */
+.chat-container { padding: 20px; height: calc(100% - 140px); overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.chat-message { max-width: 80%; padding: 12px 16px; border-radius: 15px; font-size: 14px; }
+.ai-message { background-color: var(--card-bg); align-self: flex-start; border-bottom-left-radius: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+.user-message { background-color: var(--accent-beige); color: #000; align-self: flex-end; border-bottom-right-radius: 0; }
+
+.chat-input-area {
+    position: absolute; bottom: 80px; width: 100%; padding: 10px 20px;
+    background-color: var(--bg-dark); display: flex; gap: 10px; border-top: 1px solid var(--card-bg);
+}
+.chat-input-area input { flex: 1; padding: 12px; border-radius: 20px; border: none; background-color: var(--card-bg); color: var(--text-light); }
+.chat-input-area button { background-color: var(--accent-beige); border: none; padding: 0 20px; border-radius: 20px; font-weight: bold; color: #000; }
+
+/* MAPA E CONFIGURAÇÕES */
+.full-map-bg { height: 100%; background-color: #ccc; }
+.bottom-sheet {
+    position: absolute; bottom: 90px; left: 10px; right: 10px;
+    background-color: var(--bg-dark); padding: 20px; border-radius: 20px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+}
+.status-green { color: #00C853; font-size: 12px; margin: 5px 0; font-weight: bold;}
+
+.page-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--card-bg); }
+.settings-content { padding: 20px; }
+.profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+.avatar-large { width: 70px; height: 70px; border-radius: 10px; }
+.online-status { color: #00C853; font-size: 12px; font-weight: bold;}
+
+.settings-item {
+    display: flex; align-items: center; gap: 15px; background-color: var(--card-bg);
+    padding: 15px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.item-text { flex: 1; }
+.item-text p { font-size: 14px; font-weight: bold;}
+.item-text small { font-size: 12px; color: var(--text-muted); }
+.text-danger { color: #FF5252; cursor: pointer; }
+
+/* TOGGLE (BOTÃO LIGA/DESLIGA DO TEMA) */
+.toggle { width: 40px; height: 20px; background-color: #aaa; border-radius: 10px; position: relative; }
+.toggle.active { background-color: var(--accent-beige); }
+.toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+    background-color: white; border-radius: 50%; transition: 0.3s;
+}
+.toggle.active::after { left: 22px; }
+
+/* BARRA DE NAVEGAÇÃO INFERIOR */
+.bottom-nav {
+    position: absolute; bottom: 15px; left: 15px; right: 15px;
+    background-color: var(--accent-beige); border-radius: 25px;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.bottom-nav.hidden { display: none; }
+
+.bottom-nav button {
+    background: none; border: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--nav-icon-inactive); 
+}
+
+.nav-text {
+    font-size: 10px;
+    font-weight: bold;
+    display: none; 
+}
+
+.bottom-nav button.active { color: var(--nav-icon-active); }
+.bottom-nav button.active .nav-text { display: block; }
+.bottom-nav button.active .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+
+.add-btn {
+    background-color: var(--bg-dark) !important;
+    color: var(--text-light) !important;
+    width: 50px; height: 50px; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    margin-top: -20px; 
+    border: 4px solid var(--accent-beige);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* VARIÁVEIS DE CORES: Base do Modo Escuro */
+:root {
+    --bg-dark: #1E1E1E; 
+    --text-light: #F5F5F5; 
+    --text-muted: #aaa;
+    --accent-beige: #DEBC9F; 
+    --card-bg: #2A2A2A; 
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --nav-icon-inactive: #555;
+    --nav-icon-active: #FFFFFF;
+    
+    /* COR DA SOMBRA DIAGONAL */
+    --login-blob: rgba(139, 90, 43, 0.35); /* Marrom escuro esfumaçado */
+    --grid-color: rgba(222, 188, 159, 0.15); 
+}
+
+/* VARIÁVEIS DE CORES: Base do Modo Claro (Sobrescreve as de cima) */
+.light-mode {
+    --bg-dark: #F5F5F6; 
+    --text-light: #1A1A1A; 
+    --text-muted: #666;
+    --accent-beige: #C2A285; 
+    --card-bg: #FFFFFF; 
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --nav-icon-inactive: #444;
+    --nav-icon-active: #FFFFFF;
+    
+    /* COR DA SOMBRA DIAGONAL MODO CLARO */
+    --login-blob: rgba(194, 162, 133, 0.4); 
+    --grid-color: rgba(194, 162, 133, 0.25); 
+}
+
+/* RESTO DO CSS SEGUE IGUAL, MAS MUDE A CLASSE DO LOGIN PARA: */
+
+/* TELA DE LOGIN & CADASTRO COM "CHARME" DIAGONAL */
+.login-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 30px;
+    
+    /* MÁGICA: Desenha dois círculos esfumaçados. Um no Topo-Direito, outro no Baixo-Esquerdo */
+    background: 
+        radial-gradient(circle at top right, var(--login-blob) 0%, transparent 45%),
+        radial-gradient(circle at bottom left, var(--login-blob) 0%, transparent 45%),
+        var(--bg-dark);
+}
+
+
+/* ==========================================
+   ANIMAÇÕES E EFEITOS PREMIUM (SPLASH E TOASTS)
+   ========================================== */
+
+/* --- ECRÃ DE CARREGAMENTO (SPLASH SCREEN) --- */
+.splash-screen {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--card-bg) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Fica por cima de absolutamente tudo */
+    transition: opacity 0.8s ease-in-out, visibility 0.8s;
+}
+
+/* Classe que o JS vai adicionar para esconder a Splash Screen */
+.splash-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* --- NOTIFICAÇÕES VISUAIS (TOASTS) --- */
+.toast-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none; /* Permite clicar através da caixa invisível */
+}
+
+.toast {
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+    font-size: 14px;
+    font-weight: bold;
+    transform: translateY(-50px);
+    opacity: 0;
+    /* Animação para descer e depois desaparecer ao fim de 3 segundos */
+    animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeOut 0.4s forwards 3s;
+}
+
+/* Cores da barra lateral da notificação dependendo do tipo */
+.toast.success { border-left: 5px solid #00C853; }
+.toast.error { border-left: 5px solid #FF5252; }
+.toast.info { border-left: 5px solid var(--accent-beige); }
+
+@keyframes slideDown {
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateY(-20px); visibility: hidden; }
+}
