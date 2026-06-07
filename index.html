@@ -70,7 +70,7 @@
 
         <section id="home-screen" class="screen">
             <header class="home-header">
-                <input type="text" class="search-bar" placeholder="Procure por locais próximos...">
+                <input type="text" id="home-search" class="search-bar" placeholder="Procure por um anjinho..." onkeyup="filterSeraphims()">
                 <div class="user-info">
                     <img id="home-avatar" src="imagens/sabrina.jpg" alt="Avatar" class="avatar">
                     <div>
@@ -80,7 +80,7 @@
                 </div>
             </header>
 
-            <div class="map-card" onclick="navigateTo('map-screen')">
+            <div class="map-card">
                 <div class="map-card-content">
                     <span class="material-symbols-outlined map-icon">explore</span>
                     <div>
@@ -253,6 +253,64 @@
                         <p class="privacy-link">Politicas de Privacidade</p>
                     </div>
 
+                </div>
+            </div>
+        </section>
+
+<section id="tracker-profile-screen" class="screen">
+            <header class="page-header" style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="material-symbols-outlined" style="cursor: pointer;" onclick="navigateTo('home-screen')">arrow_back_ios</span>
+                <h2 id="profile-name">Perfil do Anjinho</h2>
+                <span class="material-symbols-outlined" style="color: var(--accent-beige); cursor: pointer;" onclick="openProfileOptions()">more_vert</span>
+            </header>
+            
+            <div class="settings-content">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <img id="profile-avatar" src="" class="avatar-large" style="margin: 0 auto 10px; display: block; border: 3px solid var(--accent-beige); width: 90px; height: 90px;">
+                    <p id="profile-status" class="status-green" style="font-size: 14px;">Online • Atualizado agora</p>
+                </div>
+
+                <h3 style="font-size: 12px; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Saúde e Sinais Vitais</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div style="background-color: var(--card-bg); padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                        <span class="material-symbols-outlined" style="color: #FF5252; font-size: 35px;">favorite</span>
+                        <h4 style="margin: 5px 0; font-size: 20px;" id="profile-bpm">-- BPM</h4>
+                        <small style="color: var(--text-muted);">Batimentos</small>
+                    </div>
+                    <div style="background-color: var(--card-bg); padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                        <span class="material-symbols-outlined" style="color: var(--accent-beige); font-size: 35px;">personal_injury</span>
+                        <h4 style="margin: 5px 0; font-size: 20px;">Normal</h4>
+                        <small style="color: var(--text-muted);">Sensor Queda</small>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Zonas Seguras</h3>
+                    <span class="material-symbols-outlined" style="color: var(--accent-beige); cursor: pointer; font-size: 22px;" onclick="addSafeZone()">add_circle</span>
+                </div>
+                
+                <div class="settings-list" id="safe-zones-list" style="margin-bottom: 25px;">
+                </div>
+
+                <h3 style="font-size: 12px; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Ações</h3>
+                <div class="settings-list">
+                    <div class="settings-item" id="btn-profile-map" style="cursor: pointer; background: linear-gradient(135deg, var(--accent-beige) 0%, #8C6A4F 100%); color: #000;">
+                        <div class="settings-icon" style="background: rgba(255,255,255,0.3); color: #000;"><span class="material-symbols-outlined">map</span></div>
+                        <div class="item-text">
+                            <p style="color: #000; font-weight: bold;">Localizar no Mapa</p>
+                            <small style="color: #333;">Tempo Real</small>
+                        </div>
+                        <span class="material-symbols-outlined" style="color: #000;">chevron_right</span>
+                    </div>
+                    
+                    <div class="settings-item" style="cursor: pointer;" onclick="generatePDFHistory()">
+                        <div class="settings-icon"><span class="material-symbols-outlined">history</span></div>
+                        <div class="item-text">
+                            <p>Histórico de Rotas</p>
+                            <small>Gerar Relatório em PDF</small>
+                        </div>
+                        <span class="material-symbols-outlined settings-arrow">chevron_right</span>
+                    </div>
                 </div>
             </div>
         </section>

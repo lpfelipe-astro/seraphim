@@ -5,6 +5,8 @@
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
     transition: background-color 0.3s, color 0.3s; /* Transição suave de cor */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--accent-beige) transparent; /* Firefox */
 }
 
 /* VARIÁVEIS DE CORES: Base do Modo Escuro */
@@ -253,6 +255,8 @@ body {
     background-color: var(--accent-beige); border-radius: 25px;
     display: flex; justify-content: space-around; align-items: center;
     padding: 10px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(222, 188, 159, 0.3); /* Sombra com a cor do bege */
+
 }
 .bottom-nav.hidden { display: none; }
 
@@ -399,3 +403,4 @@ body {
 @keyframes fadeOut {
     to { opacity: 0; transform: translateY(-20px); visibility: hidden; }
 }
+
